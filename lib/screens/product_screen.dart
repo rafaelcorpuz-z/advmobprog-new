@@ -13,9 +13,9 @@ class ProductScreen extends StatelessWidget {
     try {
       await context.read<CartProvider>().addProduct(product);
       if (context.mounted) {
-        ScaffoldMessenger.of(
-          context,
-        ).showSnackBar(const SnackBar(content: Text('Added to cart')));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Added ${product.title} to cart')),
+        );
       }
     } catch (error) {
       if (context.mounted) {

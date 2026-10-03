@@ -1,98 +1,69 @@
 class Cart {
-  final int id;
-  final List<CartProduct> products;
-  final double total;
-  final double discountedTotal;
-  final int userId;
-  final int totalProducts;
-  final int totalQuantity;
-
-  Cart({
-    required this.id,
-    required this.products,
-    required this.total,
-    required this.discountedTotal,
-    required this.userId,
-    required this.totalProducts,
-    required this.totalQuantity,
-  });
-
-  factory Cart.fromJson(Map<String, dynamic> json) {
-    return Cart(
-      id: _asInt(json['id']),
-      products: (json['products'] as List<dynamic>? ?? const [])
-          .whereType<Map<String, dynamic>>()
-          .map(CartProduct.fromJson)
-          .toList(),
-      total: _asDouble(json['total']),
-      discountedTotal: _asDouble(json['discountedTotal']),
-      userId: _asInt(json['userId']),
-      totalProducts: _asInt(json['totalProducts']),
-      totalQuantity: _asInt(json['totalQuantity']),
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'products': products.map((product) => product.toJson()).toList(),
-      'total': total,
-      'discountedTotal': discountedTotal,
-      'userId': userId,
-      'totalProducts': totalProducts,
-      'totalQuantity': totalQuantity,
-    };
-  }
+ final int id;
+ final List<CartProduct> products;
+ final double total;
+ final double discountedTotal;
+ final int userId;
+ final int totalProducts;
+ final int totalQuantity;
+ Cart({
+   required this.id,
+   required this.products,
+   required this.total,
+   required this.discountedTotal,
+   required this.userId,
+   required this.totalProducts,
+   required this.totalQuantity,
+ });
+ factory Cart.fromJson(Map<String, dynamic> json) {
+   return Cart(
+     id: json['id'] ?? 0,
+     products: (json['products'] as List?)
+             ?.map((e) => CartProduct.fromJson(e))
+             .toList() ??
+         [],
+     total: (json['total'] as num?)?.toDouble() ?? 0.0,
+     discountedTotal: (json['discountedTotal'] as num?)?.toDouble() ?? 0.0,
+     userId: json['userId'] ?? 0,
+     totalProducts: json['totalProducts'] ?? 0,
+     totalQuantity: json['totalQuantity'] ?? 0,
+   );
+ }
 }
-
 class CartProduct {
-  final int id;
-  final String title;
-  final double price;
-  final int quantity;
-  final double total;
-  final double discountPercentage;
-  final double discountedPrice;
-  final String thumbnail;
-
-  CartProduct({
-    required this.id,
-    required this.title,
-    required this.price,
-    required this.quantity,
-    required this.total,
-    required this.discountPercentage,
-    required this.discountedPrice,
-    required this.thumbnail,
-  });
-
-  factory CartProduct.fromJson(Map<String, dynamic> json) {
-    return CartProduct(
-      id: _asInt(json['id']),
-      title: json['title'] as String? ?? 'Untitled product',
-      price: _asDouble(json['price']),
-      quantity: _asInt(json['quantity']),
-      total: _asDouble(json['total']),
-      discountPercentage: _asDouble(json['discountPercentage']),
-      discountedPrice: _asDouble(json['discountedPrice']),
-      thumbnail: json['thumbnail'] as String? ?? '',
-    );
-  }
-
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'title': title,
-      'price': price,
-      'quantity': quantity,
-      'total': total,
-      'discountPercentage': discountPercentage,
-      'discountedPrice': discountedPrice,
-      'thumbnail': thumbnail,
-    };
-  }
+ final int id;
+ final String title;
+ final double price;
+ final int quantity;
+ final double total;
+ final double discountPercentage;
+ final double discountedPrice; // per-unit discounted price from API
+ final String thumbnail;
+ CartProduct({
+   required this.id,
+   required this.title,
+   required this.price,
+   required this.quantity,
+   required this.total,
+   required this.discountPercentage,
+   required this.discountedPrice,
+   required this.thumbnail,
+ });
+ factory CartProduct.fromJson(Map<String, dynamic> json) {
+   return CartProduct(
+     id: json['id'] ?? 0,
+     title: json['title'] ?? '',
+     price: (json['price'] as num?)?.toDouble() ?? 0.0,
+     quantity: json['quantity'] ?? 0,
+     total: (json['total'] as num?)?.toDouble() ?? 0.0,
+     discountPercentage:
+         (json['discountPercentage'] as num?)?.toDouble() ?? 0.0,
+     discountedPrice:
+         (json['discountedTotal'] as num?)?.toDouble() != null &&
+                 (json['quantity'] ?? 0) > 0
+             ? (json['discountedTotal'] as num).toDouble() / json['quantity']
+             : (json['discountedPrice'] as num?)?.toDouble() ?? 0.0,
+     thumbnail: json['thumbnail'] ?? '',
+   );
+ }
 }
-
-double _asDouble(Object? value) => value is num ? value.toDouble() : 0;
-
-int _asInt(Object? value) => value is num ? value.toInt() : 0;

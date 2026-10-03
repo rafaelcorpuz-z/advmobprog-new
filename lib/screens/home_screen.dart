@@ -147,10 +147,10 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 Expanded(
                   child: IconButton(
-                    tooltip: 'Cart',
+                    tooltip: 'Chats',
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
-                    icon: const Icon(Icons.shopping_cart_outlined),
-                    onPressed: () => Navigator.pushNamed(context, '/cart'),
+                    icon: const Icon(Icons.chat_bubble_outline),
+                    onPressed: () => Navigator.pushNamed(context, '/chats'),
                   ),
                 ),
                 Expanded(
@@ -158,7 +158,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     tooltip: 'Profile',
                     color: Theme.of(context).colorScheme.onSurfaceVariant,
                     icon: const Icon(Icons.person_outline),
-                    onPressed: () {},
+                    onPressed: () => Navigator.pushNamed(context, '/profile'),
                   ),
                 ),
               ],
@@ -220,11 +220,7 @@ class _MovableChatButtonState extends State<_MovableChatButton> {
       opacity: opacity,
       child: FloatingActionButton(
         tooltip: 'Chat support',
-        onPressed: () {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Chat support is coming soon')),
-          );
-        },
+        onPressed: () => Navigator.pushNamed(context, '/chats'),
         child: const Icon(Icons.chat_bubble_outline),
       ),
     );
